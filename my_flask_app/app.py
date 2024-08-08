@@ -4,8 +4,8 @@ import joblib
 app = Flask(__name__)
 
 # Load your trained model and vectorizer
-model = joblib.load('sentiment_model.pkl')
-vectorizer = joblib.load('tfidf_vectorizer.pkl')
+model = joblib.load('my_flask_app\sentiment_model.pkl')
+vectorizer = joblib.load("my_flask_app\\tfidf_vectorizer.pkl")
 
 @app.route('/')
 def home():
