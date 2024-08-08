@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sentiment Analysis of IMDB Movie Reviews</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Sentiment Analysis of IMDB Movie Reviews</h1>
+        <div class="input-group">
+            <textarea id="reviewInput" rows="4" placeholder="Enter a review:"></textarea>
+        </div>
+        <button class='learn-more' onclick="predictSentiment()">
+            <span class='glowing-txt'>P<span class='faulty-letter'>R</span>EDICT</span>
+        </button>
+        <div id="result" class="result"></div>
+    </div>
+
+    <script>
+        async function predictSentiment() {
+            const review = document.getElementById('reviewInput').value;
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ review })
+                });
+                
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                
+                const result = await response.json();
+                const resultDiv = document.getElementById('result');
+                resultDiv.textContent = `Sentiment: ${result.sentiment}`;
+                resultDiv.className = 'result ' + (result.sentiment === 'Positive' ? 'positive' : 'negative');
+            } catch (error) {
+                console.error('There has been a problem with your fetch operation:', error);
+            }
+        }
+    </script>
+</body>
+</html>
